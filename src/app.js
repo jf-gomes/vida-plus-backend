@@ -1,9 +1,11 @@
-// src/app.js
-// Configuração e inicialização do Express
-
 import express from 'express';
 import { NODE_ENV } from './config/env.js';
+
+// Rotas
 import userRoutes from './routes/user.routes.js';
+import appointmentRoutes from './routes/appointment.routes.js'
+import roomRoutes from './routes/room.routes.js'
+
 import errorMiddleware from './middleware/error.middleware.js';
 
 const app = express();
@@ -31,6 +33,8 @@ app.get('/', (req, res) => {
 // Rotas específicas de entidade
 // Para autenticação, o ideal seria app.use('/api/auth', userRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/appointments', appointmentRoutes)
+app.use('/api/rooms', roomRoutes)
 // Adicionar as demais rotas aqui: app.use('/api/patients', patientRoutes);
 
 // 404 Not Found Handler

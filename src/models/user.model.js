@@ -1,6 +1,3 @@
-// src/models/user.model.js
-// Modelo Sequelize para a entidade User (base)
-
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/connection.js';
 
@@ -28,11 +25,11 @@ const User = sequelize.define('User', {
         type: DataTypes.ENUM('M', 'F', 'Outro'),
         allowNull: true,
     },
-    dob: { // Date of Birth (dob)
+    dob: {
         type: DataTypes.DATEONLY, // Apenas data, sem tempo
         allowNull: false,
     },
-    role: { // Para diferenciar Patient, HealthProfessional e Admin
+    role: { // Para diferenciar Patient, HealthProfessional e Admin (Patient por padrão)
         type: DataTypes.ENUM('Patient', 'HealthProfessional', 'Admin'),
         allowNull: false,
         defaultValue: 'Patient'
