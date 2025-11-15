@@ -35,7 +35,6 @@ const User = sequelize.define('User', {
         defaultValue: 'Patient'
     }
 }, {
-    // Opções do Modelo
     tableName: 'User', // Garante o nome exato da tabela
     // createdAt e updatedAt (já configurados em connection.js com underscored: true)
 });

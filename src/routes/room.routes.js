@@ -1,16 +1,42 @@
 import { Router } from 'express';
 import * as roomController from '../controllers/room.controller.js';
+import { authenticate, authorize } from '../middleware/auth.middleware.js'
 
 const router = Router();
 
-router.post('/create', roomController.create);
+router.post(
+    '/create',
+    authenticate,
+    authorize(['Admin', 'HealthProfessional']),
+    roomController.create
+);
 
-router.get('/', roomController.getAll);
+router.get(
+    '/',
+    authenticate,
+    authorize(['Admin', 'HealthProfessional']),
+    roomController.getAll
+);
 
-router.get('/:id', roomController.getById);
+router.get(
+    '/:id',
+    authenticate,
+    authorize(['Admin', 'HealthProfessional']),
+    roomController.getById
+);
 
-router.put('/:id', roomController.update);
+router.put(
+    '/:id',
+    authenticate,
+    authorize(['Admin', 'HealthProfessional']),
+    roomController.update
+);
 
-router.delete('/:id', roomController.remove);
+router.delete(
+    '/:id',
+    authenticate,
+    authorize(['Admin', 'HealthProfessional']),
+    roomController.remove
+);
 
 export default router;

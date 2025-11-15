@@ -1,39 +1,28 @@
-// src/services/user.service.js
 import User from '../models/user.model.js';
 import { JWT_SECRET } from '../config/env.js';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-// ** ATENÇÃO: É necessário instalar 'bcrypt' e 'jsonwebtoken' para que estas funções funcionem. **
-// Exemplo: npm install bcrypt jsonwebtoken
-
-// Função auxiliar (placeholder) para simular o hash da senha
 const hashPassword = async (password) => {
-    // const salt = await bcrypt.genSalt(10);
-    // return bcrypt.hash(password, salt);
-    console.warn("AVISO: Usando senha em texto claro. Instale e use bcrypt!");
-    return password; // Simulação SEM hash
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt)
 };
 
-// Função auxiliar (placeholder) para simular a comparação da senha
 const comparePassword = async (providedPassword, storedPassword) => {
-    // return bcrypt.compare(providedPassword, storedPassword);
-    console.warn("AVISO: Comparando senhas em texto claro. Instale e use bcrypt!");
-    return providedPassword === storedPassword; // Simulação SEM comparação segura
+    return bcrypt.compare(providedPassword, storedPassword)
 };
 
-// Função auxiliar (placeholder) para simular a geração do token JWT
 const generateToken = (payload) => {
-    // return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
-    console.warn("AVISO: Gerando token simulado. Instale e use jsonwebtoken!");
-    return `SIMULATED_JWT_FOR_USER_${payload.id}`;
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' })
 };
 
-// --- FUNÇÕES DE AUTENTICAÇÃO ---
+// ===== AUTENTICAÇÃO ======
 
 export const registerUser = async (userData) => {
-    // CORREÇÃO: Usar 'username' para desestruturar e mapear para 'userName' do modelo
-    const { username, password, name, genre, dob } = userData; 
 
-    // Se o campo obrigatório 'username' não for fornecido, lança erro
+    const { username, password, name, genre, dob, role } = userData; 
+
+    // Verifica se o username foi fornecido.
     if (!username) {
         const error = new Error('O campo username é obrigatório.');
         error.statusCode = 400;
@@ -41,7 +30,6 @@ export const registerUser = async (userData) => {
     }
 
     // Verifica se o usuário já existe
-    // Mapeia o campo de entrada 'username' (minúscula) para a coluna 'userName' (camelCase do modelo)
     const existingUser = await User.findOne({ where: { username: username } });
     if (existingUser) {
         const error = new Error('Nome de usuário já está em uso.');
@@ -49,27 +37,26 @@ export const registerUser = async (userData) => {
         throw error;
     }
 
-    // Hash da senha (substituir por bcrypt real)
+    // Hash da senha
     const hashedPassword = await hashPassword(password);
 
-    // Cria o usuário: Mapeia o campo de entrada 'username' (minúscula) para a coluna 'userName'
     const user = await User.create({ 
         username: username, // Mapeamento explícito
         password: hashedPassword, 
         name, 
         genre, 
-        dob
-        // Se houver mais campos, eles devem ser incluídos aqui
+        dob,
+        role
     });
 
-    // Gera o token (opcionalmente)
+    // Gera o token (register)
     const token = generateToken({ id: user.id });
 
     return { user, token };
 };
 
 export const loginUser = async (username, password) => {
-    // 1. Busca o usuário pelo userName (campo do modelo) usando o valor de username (input)
+
     if (!username) {
         const error = new Error('O campo username é obrigatório para o login.');
         error.statusCode = 400;
@@ -84,7 +71,7 @@ export const loginUser = async (username, password) => {
         throw error;
     }
 
-    // 2. Compara a senha (substituir por bcrypt real)
+    // Comparação da senha
     const isMatch = await comparePassword(password, user.password);
 
     if (!isMatch) {
@@ -93,14 +80,14 @@ export const loginUser = async (username, password) => {
         throw error;
     }
 
-    // 3. Gera o token JWT
+    // Gera o token (login)
     const token = generateToken({ id: user.id });
 
     return { user, token };
 };
 
 
-// --- FUNÇÕES CRUD EXISTENTES ---
+// ===== CRUD ======
 
 export const getAllUsers = async () => {
     return User.findAll();
