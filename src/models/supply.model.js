@@ -7,7 +7,6 @@ const Supply = sequelize.define('Supply', {
         primaryKey: true,
         autoIncrement: true,
     },
-    // Aqui será armazenado o código o produto
     code: {
         type: DataTypes.INTEGER,
         allowNull: false,

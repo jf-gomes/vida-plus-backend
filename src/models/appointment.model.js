@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/connection.js';
+import User from './user.model.js';
 
 const Appointment = sequelize.define('Appointment', {
     id: {
@@ -7,35 +8,54 @@ const Appointment = sequelize.define('Appointment', {
         primaryKey: true,
         autoIncrement: true,
     },
-    // ID do paciente ao qual o appointment se refere
-    patient: {
+
+    assignedTo: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: User,
+            key: 'id',
+        },
+        field: 'patient_id',
     },
-    // ID do profissional ao qual o appointment se refere
-    healthProfessional: {
+
+    assignedBy: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: User,
+            key: 'id',
+        },
+        field: 'health_professional_id',
     },
     date: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
+        type: DataTypes.DATE,
     },
     details: {
         type: DataTypes.TEXT,
-        allowNull: true,
+        allowNull: false,
     },
-    online: { // Appointment online?
+    online: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
+        allowNull: false,
     },
-    // ID do quarto no qual o appointment acontecerá
     room: {
         type: DataTypes.INTEGER,
         allowNull: true,
+    },
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 }, {
     tableName: 'Appointment',
+    paranoid: true,
 });
+
+Appointment.belongsTo(User, { as: 'Patient', foreignKey: 'patient_id', onDelete: 'CASCADE' });
+Appointment.belongsTo(User, { as: 'HealthProfessional', foreignKey: 'health_professional_id', onDelete: 'CASCADE' });
+
+// Sincroniza o modelo com o DB para garantir que a tabela seja criada
+Appointment.sync();
 
 export default Appointment;

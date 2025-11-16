@@ -16,20 +16,16 @@ const generateToken = (payload) => {
     return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' })
 };
 
-// ===== AUTENTICAÇÃO ======
-
 export const registerUser = async (userData) => {
 
     const { username, password, name, genre, dob, role } = userData; 
 
-    // Verifica se o username foi fornecido.
     if (!username) {
         const error = new Error('O campo username é obrigatório.');
         error.statusCode = 400;
         throw error;
     }
 
-    // Verifica se o usuário já existe
     const existingUser = await User.findOne({ where: { username: username } });
     if (existingUser) {
         const error = new Error('Nome de usuário já está em uso.');
@@ -37,11 +33,10 @@ export const registerUser = async (userData) => {
         throw error;
     }
 
-    // Hash da senha
     const hashedPassword = await hashPassword(password);
 
     const user = await User.create({ 
-        username: username, // Mapeamento explícito
+        username: username,
         password: hashedPassword, 
         name, 
         genre, 
@@ -49,7 +44,6 @@ export const registerUser = async (userData) => {
         role
     });
 
-    // Gera o token (register)
     const token = generateToken({ id: user.id });
 
     return { user, token };
@@ -71,7 +65,6 @@ export const loginUser = async (username, password) => {
         throw error;
     }
 
-    // Comparação da senha
     const isMatch = await comparePassword(password, user.password);
 
     if (!isMatch) {
@@ -80,14 +73,10 @@ export const loginUser = async (username, password) => {
         throw error;
     }
 
-    // Gera o token (login)
     const token = generateToken({ id: user.id });
 
     return { user, token };
 };
-
-
-// ===== CRUD ======
 
 export const getAllUsers = async () => {
     return User.findAll();

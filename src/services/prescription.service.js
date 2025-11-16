@@ -5,18 +5,15 @@ const checkUserRole = async (userId, allowedRoles, errorMessage) => {
     const user = await User.findByPk(userId, { attributes: ['role'] });
     if (!user || !allowedRoles.includes(user.role)) {
         const error = new Error(errorMessage);
-        error.statusCode = 403; // Forbidden
+        error.statusCode = 403;
         throw error;
     }
     return user.role;
 };
 
-// --- FUNÇÕES CRUD ---
-
 /**
- * Cria uma nova receita médica.
- * @param {object} data - Dados da receita, incluindo patient_id e health_professional_id.
- * @param {number} assignedById - ID do profissional logado (vem do req.user).
+ * @param {object} data
+ * @param {number} assignedById
  */
 export const createPrescription = async (data, assignedById) => {
 
@@ -40,24 +37,21 @@ export const createPrescription = async (data, assignedById) => {
 };
 
 /**
- * Busca todas as receitas (para Admin) ou receitas específicas do profissional/paciente.
- * @param {string} role - Papel do usuário logado.
- * @param {number} userId - ID do usuário logado.
+ * @param {string} role
+ * @param {number} userId
  */
+
 export const getAllPrescriptions = async (role, userId) => {
     let whereClause = {};
 
-    // Se for HealthProfessional, vê apenas as que ele criou
     if (role === 'HealthProfessional') {
         whereClause = { assignedBy: userId };
     } 
-    // Se for Patient, vê apenas as que lhe foram atribuídas
+
     else if (role === 'Patient') {
         whereClause = { assignedTo: userId };
     }
-    // Se for Admin, vê todas (whereClause fica vazio)
-    
-    // Inclui informações do paciente e do profissional
+
     return Prescription.findAll({
         where: whereClause,
         include: [
@@ -69,12 +63,12 @@ export const getAllPrescriptions = async (role, userId) => {
 };
 
 /**
- * Deleta uma receita (exclusão lógica).
  * @param {number} id - ID da receita.
  * @param {number} userId - ID do usuário logado.
  */
+
 export const deletePrescription = async (id, userId) => {
-    // 1. Busca a receita
+
     const prescription = await Prescription.findByPk(id);
 
     if (!prescription) {
@@ -83,7 +77,6 @@ export const deletePrescription = async (id, userId) => {
         throw error;
     }
 
-    // 2. Verifica se o usuário logado é o HealthProfessional que a criou ou é Admin
     const userRole = await checkUserRole(
         userId, 
         ['HealthProfessional', 'Admin'], 
@@ -96,7 +89,6 @@ export const deletePrescription = async (id, userId) => {
         throw error;
     }
 
-    // 3. Exclui logicamente (paranoid: true no modelo)
     await prescription.destroy();
     return true;
 };

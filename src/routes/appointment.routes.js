@@ -1,41 +1,27 @@
 import { Router } from 'express';
 import * as appointmentController from '../controllers/appointment.controller.js';
-import { authenticate, authorize } from '../middleware/auth.middleware.js'
+import { authenticate, authorize } from '../middleware/auth.middleware.js'; 
 
 const router = Router();
 
+const REQUIRED_ROLES_FOR_CREATION = ['HealthProfessional', 'Admin'];
+
 router.post(
-    '/create',
+    '/', 
     authenticate,
-    authorize(['Admin', 'HealthProfessional']),
+    authorize(REQUIRED_ROLES_FOR_CREATION), 
     appointmentController.create
 );
 
 router.get(
-    '/',
+    '/', 
     authenticate,
-    authorize(['Admin', 'HealthProfessional']),
     appointmentController.getAll
 );
 
-router.get(
-    '/:id',
-    authenticate,
-    authorize(['Admin', 'HealthProfessional']),
-    appointmentController.getById
-);
-
-router.put(
-    '/:id',
-    authenticate,
-    authorize(['Admin', 'HealthProfessional']),
-    appointmentController.update
-);
-
 router.delete(
-    '/:id',
+    '/:id', 
     authenticate,
-    authorize(['Admin', 'HealthProfessional']),
     appointmentController.remove
 );
 

@@ -16,21 +16,29 @@ router.post(
 
 router.get(
     '/',
+    authenticate,
+    authorize,
     userController.getAll
 );
 
 router.get(
     '/:id',
+    authenticate,
+    authorize,
     userController.getById
 );
 
 router.put(
     '/:id',
+    authenticate,
+    authorize,
     userController.update
 );
 
 router.delete(
     '/:id',
+    authenticate,
+    authorize,
     userController.remove
 );
 

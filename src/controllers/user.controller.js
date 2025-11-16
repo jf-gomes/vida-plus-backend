@@ -1,13 +1,10 @@
-// src/controllers/user.controller.js
 import * as userService from '../services/user.service.js';
-
-// --- CONTROLLERS DE AUTENTICAÇÃO ---
 
 export const register = async (req, res, next) => {
     try {
-        // CORREÇÃO: Passando o req.body inteiro para que o service lide com as propriedades
+    
         const { user, token } = await userService.registerUser(req.body); 
-        // Não envia a senha no corpo da resposta final
+
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
 
@@ -23,11 +20,10 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
     try {
-        // CORREÇÃO: Destruturando 'username' (minúscula) do corpo da requisição
-        const { username, password } = req.body; 
-        const { user, token } = await userService.loginUser(username, password); // Passa 'username' para o service
 
-        // Não envia a senha no corpo da resposta final
+        const { username, password } = req.body; 
+        const { user, token } = await userService.loginUser(username, password);
+
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
 
@@ -40,8 +36,6 @@ export const login = async (req, res, next) => {
         next(error);
     }
 };
-
-// --- CONTROLLERS CRUD EXISTENTES ---
 
 export const getAll = async (req, res, next) => {
     try {
