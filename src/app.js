@@ -5,6 +5,8 @@ import { NODE_ENV } from './config/env.js';
 import userRoutes from './routes/user.routes.js';
 import appointmentRoutes from './routes/appointment.routes.js'
 import roomRoutes from './routes/room.routes.js'
+import supplyRoutes from './routes/supply.routes.js'
+import prescriptionRoutes from './routes/prescription.routes.js'
 
 import errorMiddleware from './middleware/error.middleware.js';
 
@@ -35,6 +37,8 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/appointments', appointmentRoutes)
 app.use('/api/rooms', roomRoutes)
+app.use('/api/supplies', supplyRoutes)
+app.use('/api/prescriptions', prescriptionRoutes)
 // Adicionar as demais rotas aqui: app.use('/api/patients', patientRoutes);
 
 // 404 Not Found Handler
