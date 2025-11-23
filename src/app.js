@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { NODE_ENV } from './config/env.js';
 
 import userRoutes from './routes/user.routes.js';
@@ -10,6 +11,14 @@ import prescriptionRoutes from './routes/prescription.routes.js'
 import errorMiddleware from './middleware/error.middleware.js';
 
 const app = express();
+
+// Permite requisições de qualquer origem durante o desenvolvimento
+// Em produção, restringir ao domínio do frontend.
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 

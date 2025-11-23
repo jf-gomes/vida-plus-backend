@@ -18,7 +18,7 @@ const generateToken = (payload) => {
 
 export const registerUser = async (userData) => {
 
-    const { username, password, name, genre, dob, role } = userData; 
+    const { username, email, password, name, genre, dob, role } = userData; 
 
     if (!username) {
         const error = new Error('O campo username é obrigatório.');
@@ -37,6 +37,7 @@ export const registerUser = async (userData) => {
 
     const user = await User.create({ 
         username: username,
+        email,
         password: hashedPassword, 
         name, 
         genre, 
@@ -49,15 +50,15 @@ export const registerUser = async (userData) => {
     return { user, token };
 };
 
-export const loginUser = async (username, password) => {
+export const loginUser = async (email, password) => {
 
-    if (!username) {
-        const error = new Error('O campo username é obrigatório para o login.');
+    if (!email) {
+        const error = new Error('O campo e-mail é obrigatório para o login.');
         error.statusCode = 400;
         throw error;
     }
     
-    const user = await User.findOne({ where: { username: username } });
+    const user = await User.findOne({ where: { email: email } });
 
     if (!user) {
         const error = new Error('Usuário ou senha inválidos.');

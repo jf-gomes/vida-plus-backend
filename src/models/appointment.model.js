@@ -55,7 +55,6 @@ const Appointment = sequelize.define('Appointment', {
 Appointment.belongsTo(User, { as: 'Patient', foreignKey: 'patient_id', onDelete: 'CASCADE' });
 Appointment.belongsTo(User, { as: 'HealthProfessional', foreignKey: 'health_professional_id', onDelete: 'CASCADE' });
 
-// Sincroniza o modelo com o DB para garantir que a tabela seja criada
 Appointment.sync();
 
 export default Appointment;

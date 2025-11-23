@@ -21,8 +21,8 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
     try {
 
-        const { username, password } = req.body; 
-        const { user, token } = await userService.loginUser(username, password);
+        const { email, password } = req.body; 
+        const { user, token } = await userService.loginUser(email, password);
 
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
