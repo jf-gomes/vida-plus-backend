@@ -2,10 +2,11 @@ import Supply from '../models/supply.model.js';
 
 export const createSupply = async (supplyData) => {
 
-    const { code, description, quantity } = supplyData; 
+    const { code, name, description, quantity } = supplyData; 
 
     const supply = await Supply.create({ 
         code,
+        name,
         description,
         quantity
     });

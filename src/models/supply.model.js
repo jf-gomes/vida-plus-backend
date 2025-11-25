@@ -11,16 +11,20 @@ const Supply = sequelize.define('Supply', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     description: {
         type: DataTypes.TEXT,
-        allowNull: true,
+        allowNull: false,
     },
     quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
     }
 }, {
-    tableName: 'Supply',
+    tableName: 'Supply'
 });
 
 export default Supply;

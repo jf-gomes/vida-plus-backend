@@ -2,7 +2,7 @@ import Room from '../models/room.model.js';
 
 export const createRoom = async (roomData) => {
 
-    const { type, capacity } = roomData; 
+    const { number, type, capacity } = roomData; 
 
     const room = await Room.create({ 
         type,

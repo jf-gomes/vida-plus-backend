@@ -7,6 +7,10 @@ const Room = sequelize.define('Room', {
         primaryKey: true,
         autoIncrement: true,
     },
+    number: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     type: {
         type: DataTypes.ENUM('AppointmentRoom', 'Hospitalization'),
         allowNull: false,
