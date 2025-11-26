@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser'
 import { NODE_ENV } from './config/env.js';
 
 import userRoutes from './routes/user.routes.js';
@@ -15,15 +16,19 @@ const app = express();
 // Permite requisições de qualquer origem durante o desenvolvimento
 // Em produção, restringir ao domínio do frontend.
 app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods: ['GET', 'HEAD', 'PATCH', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
 
+app.use(cookieParser());
+
 app.use((req, res, next) => {
     console.log(`[Request] ${req.method} ${req.originalUrl}`);
+    console.log('Cookies recebidos: ', req.cookies)
     next();
 });
 

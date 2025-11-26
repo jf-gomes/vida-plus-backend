@@ -20,6 +20,29 @@ export const getAll = async (req, res, next) => {
     }
 };
 
+export const getById = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const { id: userId, role } = req.user; // Obtém ID e Role do usuário logado
+        
+        const prescription = await prescriptionService.getPrescriptionById(id, userId, role);
+        res.status(200).json(prescription);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const update = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const userId = req.user.id;
+        const updatedPrescription = await prescriptionService.updatePrescription(id, req.body, userId);
+        res.status(200).json(updatedPrescription);
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const remove = async (req, res, next) => {
     try {
         const userId = req.user.id; 

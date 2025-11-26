@@ -19,6 +19,19 @@ router.get(
     prescriptionController.getAll
 );
 
+router.get(
+    '/:id', 
+    authenticate, 
+    prescriptionController.getById
+);
+
+router.put(
+    '/:id', 
+    authenticate, 
+    authorize(REQUIRED_ROLES_FOR_CREATION), 
+    prescriptionController.update
+);
+
 router.delete(
     '/:id', 
     authenticate, 

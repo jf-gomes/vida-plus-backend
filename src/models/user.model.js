@@ -37,6 +37,10 @@ const User = sequelize.define('User', {
         type: DataTypes.ENUM('Patient', 'HealthProfessional', 'Admin'),
         allowNull: false,
         defaultValue: 'Patient'
+    },
+    roomId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     }
 }, {
     tableName: 'User',
