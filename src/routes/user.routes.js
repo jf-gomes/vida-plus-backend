@@ -17,21 +17,21 @@ router.post(
 router.get(
     '/',
     authenticate,
-    authorize,
+    authorize(['Admin', 'HealthProfessional']),
     userController.getAll
 );
 
 router.get(
     '/:id',
     authenticate,
-    authorize,
+    authorize(['Admin', 'HealthProfessional']),
     userController.getById
 );
 
 router.put(
     '/:id',
     authenticate,
-    authorize,
+    authorize(['Admin', 'HealthProfessional']),
     userController.update
 );
 

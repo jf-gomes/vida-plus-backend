@@ -78,8 +78,17 @@ export const getAll = async (req, res, next) => {
 
 export const getById = async (req, res, next) => {
     try {
-        const user = await userService.getUserById(req.params.id);
-        res.status(200).json(user);
+        const requester = req.user;
+        const requestedId = parseInt(req.params.id);
+        if (requester.role === 'Patient' && requester.id !== requestedId) {
+            const error = new Error('Acesso negado. Você só pode visualizar seu próprio perfil.');
+            error.statusCode = 403;
+            throw error;
+        }
+        const user = await userService.getUserById(requestedId);
+        const userJson = user.toJSON();
+        delete userJson.password;
+        res.status(200).json(userJson);
     } catch (error) {
         next(error);
     }
