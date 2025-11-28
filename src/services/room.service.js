@@ -4,7 +4,8 @@ export const createRoom = async (roomData) => {
 
     const { number, type, capacity } = roomData; 
 
-    const room = await Room.create({ 
+    const room = await Room.create({
+        number,
         type,
         capacity
     });
