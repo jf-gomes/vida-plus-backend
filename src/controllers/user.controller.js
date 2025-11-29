@@ -44,7 +44,8 @@ export const login = async (req, res, next) => {
         res.status(200).json({
             message: 'Login realizado com sucesso!',
             user: userWithoutPassword,
-            token
+            //token
+            //descomentar a linha acima se quiser exibir o token no console ao realizar o login
         });
     } catch (error) {
         next(error);
