@@ -1,5 +1,7 @@
 import * as prescriptionService from '../services/prescription.service.js';
 
+//============ FUNÇÕES CRUD ============
+
 export const create = async (req, res, next) => {
     try {
         const assignedById = req.user.id; 
@@ -23,7 +25,7 @@ export const getAll = async (req, res, next) => {
 export const getById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const { id: userId, role } = req.user; // Obtém ID e Role do usuário logado
+        const { id: userId, role } = req.user;
         
         const prescription = await prescriptionService.getPrescriptionById(id, userId, role);
         res.status(200).json(prescription);

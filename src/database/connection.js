@@ -1,6 +1,9 @@
 import { Sequelize } from 'sequelize';
+
+//importação das variáveis de ambiente
 import { DB_DATABASE, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, NODE_ENV } from '../config/env.js';
 
+//configurações do sequelize
 const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
     port: DB_PORT,
@@ -13,7 +16,7 @@ const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
     dialectOptions: {}
 });
 
-
+//conexão com o banco via sequelize
 const connectDB = async () => {
     try {
         await sequelize.authenticate();

@@ -15,6 +15,9 @@ const checkUserRole = async (userId, allowedRoles, errorMessage) => {
  * @param {object} data
  * @param {number} assignedById
  */
+
+//apenas profissionais de saúde e administradores podem criar consultas
+// a função checkUserRole garante isso
 export const createAppointment = async (data, assignedById) => {
 
     await checkUserRole(
@@ -41,6 +44,8 @@ export const createAppointment = async (data, assignedById) => {
  * @param {number} userId
  */
 
+//se o usuário for profissional de saúde, só poderá visualizar as receitas geradas por ele
+//se o usuário for paciente, só poderá visualizar as receitas atribuídas a ele
 export const getAllAppointments = async (role, userId) => {
     let whereClause = {};
 
@@ -67,6 +72,7 @@ export const getAllAppointments = async (role, userId) => {
  * @param {number} userId - ID do usuário logado.
  */
 
+//verifica se o usuário é o médico que gerou a receita ou administrador
 export const deleteAppointment = async (id, userId) => {
 
     const appointment = await Appointment.findByPk(id);

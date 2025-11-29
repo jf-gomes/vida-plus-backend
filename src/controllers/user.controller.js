@@ -1,29 +1,27 @@
 import * as userService from '../services/user.service.js';
 
-// --- CONFIGURAÇÃO DE COOKIE ---
-// Configuração padrão para garantir segurança
+//configurações dos cookies
 const getCookieOptions = () => ({
-    httpOnly: true, // ESSENCIAL: Impede acesso via JavaScript (Proteção XSS)
-    secure: false, // Use 'true' em produção (HTTPS) e 'false' em desenvolvimento local (HTTP)
-    sameSite: 'Lax', // Mitiga ataques CSRF
-    maxAge: 1000 * 60 * 60 * 24 // 24 horas (ajustar conforme o '1d' do seu JWT)
+    httpOnly: true, //impede acesso via JS
+    secure: false, //usar true em produção e false em desenvolvimento
+    sameSite: 'Lax',
+    maxAge: 1000 * 60 * 60 * 24
 });
 
-// --- FIM DA CONFIGURAÇÃO DE COOKIE ---
+//============ FUNÇÕES CRUD ============
 
 export const register = async (req, res, next) => {
     try {
     
         const { user, token } = await userService.registerUser(req.body);
 
-        // 1. Define o cookie HTTP-only com o token
         res.cookie('access_token', token, getCookieOptions());
 
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
 
         res.status(201).json({
-            message: 'Usuário registrado com sucesso! Token armazenado em cookie seguro',
+            message: 'Usuário registrado com sucesso!',
             user: userWithoutPassword,
             token
         });
@@ -38,14 +36,13 @@ export const login = async (req, res, next) => {
         const { email, password } = req.body; 
         const { user, token } = await userService.loginUser(email, password);
 
-        // 1. Define o cookie HTTP-only com o token
         res.cookie('access_token', token, getCookieOptions());
 
         const userWithoutPassword = { ...user.toJSON() };
         delete userWithoutPassword.password;
 
         res.status(200).json({
-            message: 'Login realizado com sucesso! Token armazenado em cookie seguro',
+            message: 'Login realizado com sucesso!',
             user: userWithoutPassword,
             token
         });
@@ -54,17 +51,16 @@ export const login = async (req, res, next) => {
     }
 };
 
-// 3. FUNÇÃO LOGOUT (Nova)
+//a função de logout expira o token automaticamente
 export const logout = (req, res) => {
-    // Para remover o cookie, definimos ele novamente, mas com uma data de expiração passada.
     res.cookie('access_token', '', {
         httpOnly: true,
-        expires: new Date(0), // Expira imediatamente
+        expires: new Date(0),
         secure: false, 
         sameSite: 'Lax'
     });
 
-    res.status(200).json({ message: 'Logout realizado com sucesso.' });
+    res.status(200).json({ message: 'Logout realizado com sucesso!' });
 };
 
 export const getAll = async (req, res, next) => {
@@ -85,6 +81,7 @@ export const getById = async (req, res, next) => {
             error.statusCode = 403;
             throw error;
         }
+        //removemos a senha antes de retornar os dados do usuário (boa prática)
         const user = await userService.getUserById(requestedId);
         const userJson = user.toJSON();
         delete userJson.password;

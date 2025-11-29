@@ -1,5 +1,6 @@
 import Supply from '../models/supply.model.js';
 
+//aqui a proteção é feita no src/middleware/auth.middleware.js
 export const createSupply = async (supplyData) => {
 
     const { code, name, description, quantity } = supplyData; 

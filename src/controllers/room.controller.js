@@ -1,5 +1,7 @@
 import * as roomService from '../services/room.service.js';
 
+//============ FUNÇÕES CRUD ============
+
 export const getAll = async (req, res, next) => {
     try {
         const rooms = await roomService.getAllRooms();

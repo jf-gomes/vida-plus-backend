@@ -1,5 +1,6 @@
 import Room from '../models/room.model.js';
 
+//aqui a proteção é feita no src/middleware/auth.middleware.js
 export const createRoom = async (roomData) => {
 
     const { number, type, capacity } = roomData; 

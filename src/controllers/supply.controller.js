@@ -1,5 +1,7 @@
 import * as supplyService from '../services/supply.service.js';
 
+//============ FUNÇÕES CRUD ============
+
 export const getAll = async (req, res, next) => {
     try {
         const supplies = await supplyService.getAllSupplies();

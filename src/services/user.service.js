@@ -3,15 +3,18 @@ import { JWT_SECRET } from '../config/env.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+//hash da senha
 const hashPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt)
 };
 
+//compara a senha informada com a senha armazenada
 const comparePassword = async (providedPassword, storedPassword) => {
     return bcrypt.compare(providedPassword, storedPassword)
 };
 
+//token jwt
 const generateToken = (payload) => {
     return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' })
 };
@@ -78,6 +81,8 @@ export const loginUser = async (email, password) => {
 
     return { user, token };
 };
+
+//aqui a proteção é feita no src/middleware/auth.middleware.js
 
 export const getAllUsers = async () => {
     return User.findAll();

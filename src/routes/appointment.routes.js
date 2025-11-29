@@ -4,12 +4,13 @@ import { authenticate, authorize } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-const REQUIRED_ROLES_FOR_CREATION = ['HealthProfessional', 'Admin'];
-
+//abaixo estão as rotas da entidade Appointment
+//cada rota chama uma função do controller
+//algumas funções necessitam do authorize para serem chamadas
 router.post(
     '/', 
     authenticate,
-    authorize(REQUIRED_ROLES_FOR_CREATION), 
+    authorize(['HealthProfessional', 'Admin']), 
     appointmentController.create
 );
 

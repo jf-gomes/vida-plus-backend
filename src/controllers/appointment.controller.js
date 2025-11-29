@@ -1,5 +1,7 @@
 import * as appointmentService from '../services/appointment.service.js';
 
+//============ FUNÇÕES CRUD ============
+//a proteção ocorre no arquivo de rotas
 export const create = async (req, res, next) => {
     try {
         const assignedById = req.user.id; 
