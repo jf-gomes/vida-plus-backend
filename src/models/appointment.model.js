@@ -36,7 +36,7 @@ const Appointment = sequelize.define('Appointment', {
         allowNull: false,
     },
     online: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     room: {
